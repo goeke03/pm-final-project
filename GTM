@@ -1,0 +1,18 @@
+hip this as a tier S release, and keep every external channel dark until the single read at the end of the 9 months. The full plan is in Income explainer GTM plan, laid out so the audience numbers, the ship rule, and the phase-3 actions stay in one place you can reopen.
+
+The release. One feature: a plain explainer of why income is asked and how it is used. It is copy on a question that already exists, so it ships as a release, not a campaign. The product owner freezes that copy on day one of intake.
+
+The goal. More kept instalments, which is the reliable money. The file counts agreements and 60-day misses, not instalments inside an agreement, so the working unit is a kept agreement: starters × agreement rate × 60-day hold.
+
+The audience. Variable-or-shift starters in the portal, at the income question. A sample month has 2,862 of them. They agree at 41.6%, and 22.5% of those agreements miss within 60 days, the highest miss in the worksheet, which is a 77.5% hold. That hold is also the floor in your ship rule. Two-claim and three-or-more starters stay outside this release: the worksheet describes them as needing a person, and this copy answers the income question.
+
+The read. Intake is the first 7 sample-months, about 1,430 people per arm, about 10,010 per arm. A 2-point lift at 80% power needs about 9,600 per arm, so the test is sized. The one read is 60 days after intake closes. A 14-day peek cannot see the lift or the hold.
+
+The call.
+
+Ship if agreement rate is at least 2 percentage points above control at two-sided p < 0.05, and the hold stays at or above 77.5% and at or above control. Then the explainer goes to every variable-or-shift starter, and the help page, release note, and support note go out.
+Iterate if agreement rate is above control, the lift is under 2 points, and the hold is intact. Rewrite the copy and run a new test. This is the call the worksheet marks as most likely.
+Kill if agreement rate does not improve or falls, or the hold breaks. Remove the explainer and close the release.
+At today’s volume, a full sample month that hit the ship bar with the hold still at 77.5% would be about 44 more kept agreements (1,191 agreements and 923 kept today, versus 1,248 and 967). That illustration uses the persona rates; the experiment itself compares arms.
+
+Channels. The explainer on the question (treatment arm only during the test), then the help page and release note, then a support note in the same words. The third channel was blank; it is filled from your enablement line, local communications. Paid stays parked: the people who need the explanation are already at the question, and the worksheet sets no budget and no euro value for a kept agreement in this segment. The product owner is the only owner named, so the ship call sits with them.
