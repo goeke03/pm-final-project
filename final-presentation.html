@@ -279,6 +279,13 @@
   .anchor { margin-top: auto; }
   .meta { display: grid; grid-template-columns: 1.1fr 1fr 1.2fr; gap: 0.9vw; }
   .cover-top { display: flex; justify-content: space-between; gap: 2vw; align-items: flex-end; }
+  a.repo {
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.3;
+    text-underline-offset: 0.15em;
+  }
   .proto {
     font-family: var(--mono);
     color: #07162C;
@@ -338,10 +345,10 @@
     <div class="slide-body">
       <p class="kicker">BU Collection · Digital instalment journey</p>
       <h1>Digital instalment journey</h1>
-      <p class="muted" style="max-width:46rem">Plain explainer for why income is asked and how it is used.</p>
+      <p class="muted" style="max-width:46rem">The bet is the income explainer. Payday sizing and the agent handoff are other cards.</p>
       <div class="card hero" style="max-width:58rem">
         <p class="kicker">One-line pitch</p>
-        <p class="quote" style="margin-top:0.6vh">For consumers who can't pay a balance in full, we build the plan around your real income and payday, tell you plainly what happens next, and if your case needs a person, they already know your story.</p>
+        <p class="quote" style="margin-top:0.6vh">On a short break, ask a shift-work consumer for this month’s income, say that the number sizes the instalment, and say that the balance does not change. Test that copy for a 2-point rise in agreements that are still paying at 60 days.</p>
       </div>
       <div class="meta">
         <div class="stat tile">
@@ -349,20 +356,20 @@
           <span>Name</span>
         </div>
         <div class="stat">
-          <span class="missing">_(not filled)_</span>
-          <span style="display:block;margin-top:0.6vh">Cohort</span>
+          <b style="font-family:var(--sans);font-size:1.15rem;letter-spacing:0">B2B Riverty 2</b>
+          <span>Cohort</span>
         </div>
         <div class="stat">
-          <span class="missing">_(not filled)_</span>
-          <span style="display:block;margin-top:0.6vh">Repo link · plain text, no URL in the project</span>
+          <a class="repo" href="https://github.com/goeke03/pm-final-project">github.com/goeke03/pm-final-project</a>
+          <span style="display:block;margin-top:0.6vh">Repo</span>
         </div>
       </div>
       <div style="margin-top:auto" class="stack">
       <div class="grid-3" style="grid-template-columns:repeat(4,1fr)">
         <div class="stat orange"><b>N-01</b><span>Income question on a break. They close it and mean to come back.</span></div>
-        <div class="stat cyan"><b>41.6%</b><span>Variable-or-shift agreement rate · 2,862 starters</span></div>
-        <div class="stat teal"><b>Tier S</b><span>A release. Dark until the single read at month 9.</span></div>
-        <div class="stat pink"><b>77.5%</b><span>Segment no-miss hold. The guardrail floor.</span></div>
+        <div class="stat cyan"><b>+2 pts</b><span>The only lift this copy is allowed to claim. Baseline 41.6%.</span></div>
+        <div class="stat teal"><b>+44</b><span>Extra kept agreements a month if that lift holds on the full segment.</span></div>
+        <div class="stat pink"><b>77.5%</b><span>Hold floor. A miss inside 60 days is not the money.</span></div>
       </div>
       <div class="row" style="align-items:center">
         <span class="eyebrow">Prototype</span>
@@ -375,7 +382,7 @@
 
   <section id="strategy" data-title="Slide 5, Strategy">
     <p class="eyebrow">Slide 5 · Strategy</p>
-    <h2>A plan they can keep starts at the income question.</h2>
+    <h2>This bet is two sentences. It is not the 6.5-point gap.</h2>
     <div class="slide-body">
       <div class="grid-2 grow">
         <div class="stack">
@@ -384,22 +391,22 @@
             <p class="quote" style="margin-top:0.7vh">Consumers in financial pressure are being pushed into instalment plans they can't keep, or leaving to work it out elsewhere, so creditors lose recoveries, agents inherit cold, context-free cases, and the product's promise of a plan that holds erodes with every missed first payment.</p>
           </div>
           <div class="card hero grow">
-            <p class="kicker">Value proposition</p>
-            <p style="margin-top:0.7vh">For consumers who can't pay a balance in full, we build the plan around your real income and payday, tell you plainly what happens next, and if your case needs a person, they already know your story.</p>
-            <p class="tiny" style="margin-top:1vh">Primary persona, the shift-income consumer. A consumer in shift or variable work who cannot pay the balance in full and tries to set up an instalment plan in a short break.</p>
+            <p class="kicker">Value proposition · this release</p>
+            <p style="margin-top:0.7vh">For a consumer in shift or variable work who cannot pay in full and is on a short break, the income field asks for this month, says the number sizes the instalment, and says the balance owed does not change.</p>
+            <p class="tiny" style="margin-top:1vh">The journey line, a plan built on payday with a handoff that already knows the story, stays on the roadmap. It is not what this copy ships. Persona: the shift-income consumer.</p>
           </div>
         </div>
         <div class="callout tile" style="display:flex;flex-direction:column;gap:0.8vh">
-          <p class="kicker">Data-backed hypothesis</p>
-          <p class="small">Based on N-01, a shift worker who closed the journey on a break because they did not know if income meant this month or a normal month, N-06 and T-206, where the income number is unexplained and feels unsafe to type, T-201, where 853 income documents never arrived, and a sample-month agreement rate of 41.6% for 2,862 variable or shift starters against 48.1% for a fixed salary, with 1,421 people leaving after the affordability questions and 1,313 at the income document, I believe that asking for the income of the month they are in, and telling them why that number is needed and how long it is kept, for consumers in shift or variable work who cannot pay in full, will result in more of them finishing a plan they are still paying 60 days later, as measured by a 6.5 percentage point rise in their agreement rate, from 41.6% to 48.1%. I will protect the share of new agreements with no missed payment within 60 days, 81.0% overall and 77.5% for this segment, and I will make a go/no-go decision after one journey month plus 60 days.</p>
-          <p class="tiny">The 6.5 point gap to 48.1% stays the hypothesis for the wider income work, not a claim for this copy.</p>
+          <p class="kicker">Hypothesis this test can carry</p>
+          <p class="small">I believe that the field label “This month’s income” plus the two sentences on why it is asked and how it is used, for that shift-work consumer, will produce more finished agreements, as measured by a 2 percentage-point rise in the variable-or-shift agreement rate within 9 months. The 60-day no-miss hold for this segment stays at or above 77.5% and at or above control.</p>
+          <p class="tiny">Context, not the claim: fixed salary agrees at 48.1%. That 6.5-point gap is the wider income problem. This copy does not say how long the number is kept, and it does not claim the gap.</p>
         </div>
       </div>
       <div class="grid-3" style="grid-template-columns:repeat(4,1fr)">
-        <div class="stat orange"><b>41.6%</b><span>Variable-or-shift agreement rate · 2,862 starters</span></div>
-        <div class="stat blue"><b>48.1%</b><span>Fixed-salary agreement rate · 4,311 starters</span></div>
-        <div class="stat pink"><b>22.5%</b><span>This segment’s agreements that miss within 60 days</span></div>
-        <div class="stat teal"><b>77.5%</b><span>Segment no-miss hold · 81.0% overall, 3,115 of 3,846</span></div>
+        <div class="stat orange"><b>41.6%</b><span>Baseline agreement · 2,862 variable-or-shift starters</span></div>
+        <div class="stat blue"><b>+2 pts</b><span>The bar. 43.6% agreement. Not 48.1%.</span></div>
+        <div class="stat teal"><b>+44</b><span>Kept agreements a month on the full segment, hold flat at 77.5%.</span></div>
+        <div class="stat pink"><b>77.5%</b><span>Guardrail. 22.5% of this segment’s agreements miss inside 60 days.</span></div>
       </div>
       <p class="source">Source: practice data pack, sample month. Illustrative. Do not present these figures as Riverty facts.</p>
     </div>
@@ -418,11 +425,11 @@
             <li><strong>Call a person.</strong> N-04: “Honestly I prefer to call. A person can tell me if this is going to cost me more.” why_income_is_asked is 419 of 2,592 agent contacts (16.2%), average 11.8 minutes.</li>
             <li><strong>Trust the letter.</strong> N-07: “The amount online was not the amount in the letter. I did not want to agree to anything until someone explained it.”</li>
           </ul>
-          <p class="kicker" style="margin-top:1.2vh">Advantages over that workaround</p>
+          <p class="kicker" style="margin-top:1.2vh">Full journey · not this release</p>
           <ul class="clean small">
-            <li>Payday builds the term. They agree an instalment they can keep.</li>
-            <li>The next step is plain on screen. They decide without leaving to call.</li>
-            <li>The story stays on the case. A person explains it without a restart.</li>
+            <li>Payday builds the term. Separate card. Not in this test.</li>
+            <li>The next step is plain on screen. This bet only does that on the income question.</li>
+            <li>The story stays on the case. Agent handoff is Next, not Now.</li>
           </ul>
         </div>
         <div class="card hero tile">
@@ -483,7 +490,7 @@
 
   <section id="blueprint" data-title="Slide 7, Blueprint">
     <p class="eyebrow">Slide 7 · Blueprint</p>
-    <h2>Now is the explainer. The copy does not claim the 6.5 point gap.</h2>
+    <h2>Now is the explainer because it is N-01 and effort 1.</h2>
     <div class="slide-body">
       <div class="grid-3">
         <div class="lane now">
@@ -520,7 +527,7 @@
           </div>
         </div>
       </div>
-      <p class="tiny"><span class="dotc c-cut"></span>Cut list: Show the shortest plan first to raise recovery (Fill-in, 3 / 1). Chat assistant on every portal page (Money pit, 2 / 5).</p>
+      <p class="tiny"><span class="dotc c-cut"></span>Cut list: Show the shortest plan first to raise recovery (Fill-in, 3 / 1). Chat assistant on every portal page (Money pit, 2 / 5). The funded bet stays the explainer. Payday date scores value 4 / effort 2 and stays the next card, outside this result.</p>
       <div>
         <p class="kicker" style="margin-bottom:0.6vh">MoSCoW · the plain income explainer</p>
         <div class="grid-3" style="grid-template-columns:repeat(4,1fr)">
@@ -579,7 +586,7 @@
           <div>
             <p class="kicker">Primary metric</p>
             <p class="small">Agreement rate for variable-or-shift starters.</p>
-            <p class="tiny">Baseline 41.6% on 2,862 starters. MDE ≥ 2 percentage points, two-sided p &lt; 0.05. About 9,600 per arm at 80% power.</p>
+            <p class="tiny">Baseline 41.6% on 2,862 starters. MDE ≥ 2 percentage points, two-sided p &lt; 0.05. About 9,600 per arm at 80% power. At a flat 77.5% hold that is about 22 extra kept agreements a month on the treatment arm, about 155 across the 7 intake months, and about 44 a month if the full segment ships.</p>
           </div>
         </div>
         <div class="grid-2">
@@ -636,9 +643,8 @@
               <span class="pill">Release note</span>
               <span class="pill">Support note</span>
               <span class="pill park">Paid campaign · parked</span>
-              <span class="pill park">Channel 3 · _(not filled)_</span>
             </div>
-            <p class="tiny" style="margin-top:0.7vh">It's a quick addition to an existing feature. Little risk on stability. Just an improvement. Enablement: marketing, local communications. Product owner on help pages. Product owner contacts marketing. Paid stays unfunded until a ship call and a separate budget.</p>
+            <p class="tiny" style="margin-top:0.7vh">Quick addition to the income screen. Enablement is local communications, and only after the read. Felix owns the help page. Florian is the marketing contact. Paid stays unfunded. The ask is to fund this read.</p>
           </div>
         </div>
         <div class="stack">
@@ -647,13 +653,13 @@
             <div class="stat cyan"><b>41.6%</b><span>Agreement rate today · primary metric</span></div>
             <div class="stat pink"><b>22.5%</b><span>Agreements that miss within 60 days</span></div>
             <div class="stat teal"><b>77.5%</b><span>No-miss hold floor at the read</span></div>
-            <div class="stat blue"><b>+2 pts</b><span>MDE versus control · p &lt; 0.05 · ~9,600 per arm</span></div>
-            <div class="stat"><b>32.2%</b><span>Kept-agreement rate · 41.6% × 77.5%</span></div>
+            <div class="stat blue"><b>+22</b><span>Extra kept agreements a month on the treatment arm</span></div>
+            <div class="stat"><b>+44</b><span>Extra kept agreements a month if the segment ships</span></div>
           </div>
           <div class="callout bad">
             <p class="kicker" style="color:var(--pink)">Bad signal</p>
             <p style="margin-top:0.45vh">Less instalments because more reading.</p>
-            <p class="tiny" style="margin-top:0.45vh">Fewer agreements because the extra reading stops people, or a hold under 77.5% or under control. Most likely post-launch decision on the worksheet: iterate.</p>
+            <p class="tiny" style="margin-top:0.45vh">Fewer agreements because the extra reading stops people, or a hold under 77.5% or under control. The worksheet once marked iterate as the likely call. The rule stands. The pitch does not walk in expecting to miss.</p>
           </div>
           <p class="tiny">Success metrics named on the worksheet: instalments increase, instalments are kept. The help page, the release note, the support note, and any paid media wait for the read. During intake the explainer is visible only on the treatment arm.</p>
         </div>
@@ -664,40 +670,23 @@
 
   <section id="story" data-title="Slide 10, Story">
     <p class="eyebrow">Slide 10 · Story</p>
-    <h2>The break ends before the question makes sense.</h2>
+    <h2>Kept agreements are the bet. More broken plans are not.</h2>
     <div class="slide-body">
-      <div class="split">
-        <div class="stack">
-          <p class="kicker">Friction points</p>
-          <div class="card">
-            <p class="small"><strong>N-01.</strong> “I opened it on my break. It asked for my income and I did not know if they meant this month or a normal month. I closed it and meant to come back.”</p>
-          </div>
-          <div class="card">
-            <p class="small"><strong>N-06.</strong> “I was scared to type the wrong number. What if they use it against me?”</p>
-          </div>
-          <div class="card">
-            <p class="small"><strong>T-206.</strong> No help text explains why income is asked or how long it is kept.</p>
-          </div>
-          <div class="card">
-            <p class="small"><strong>N-08.</strong> “Half my calls start with me asking for the same details they already typed online. I cannot see what they entered.”</p>
-          </div>
+      <div class="split fill">
+        <div class="card hero tile">
+          <p class="kicker">Aha</p>
+          <p class="quote" style="margin-top:0.8vh">This segment does not need a larger book of plans. Of 2,862 starters, 41.6% agree and 22.5% of those agreements miss inside 60 days, the highest miss rate in the file. An agreement that misses is not reliable money.</p>
+          <p class="small" style="margin-top:1.2vh">Two sentences can be tested for a 2-point move. They do not close the 6.5-point gap to a fixed salary, they do not size the plan to payday, and they do not stop the agent from asking for the same details again. N-01 is the friction this copy touches. N-06, T-206, and N-08 are why the words have to be on the screen, not in a call.</p>
         </div>
-        <div class="stack">
-          <div class="card hero">
-            <p class="kicker">Aha moment</p>
-            <p style="margin-top:0.7vh"><span class="missing">_(not filled)_</span></p>
-            <p class="tiny" style="margin-top:0.8vh">The project never names an aha moment. Closest stated line, not an aha: “this gives reliable money.” An agreement that misses a payment inside 60 days is not that money.</p>
-          </div>
-          <div class="card tile">
-            <p class="kicker">What the project does next</p>
-            <ul class="clean small">
-              <li>Beta as a silent launch. Phase 2 for everyone in this segment. Then see marketing impact.</li>
-              <li>The read date is fixed at the end of 9 months. No results are reviewed before this date.</li>
-              <li>Most likely call on the worksheet: iterate. Rewrite only if the lift is under 2 points and the hold still holds. A new test comes before any wider release.</li>
-              <li>Paid stays parked. A rollout past variable-or-shift starters is a later decision. The hold evidence covers this segment only.</li>
-              <li>A bad read closes this feature. A different feature would be a new plan.</li>
-            </ul>
-          </div>
+        <div class="card tile">
+          <p class="kicker">What I would do next</p>
+          <ul class="clean small">
+            <li>Fund the copy test. Keep every external channel dark until the single read at month 9.</li>
+            <li>Count kept agreements, not agreements. About 22 extra a month in the test, about 44 a month if the segment ships, hold flat at 77.5%.</li>
+            <li>The funded bet stays the explainer. Payday date stays on its own card. Felix owns the help page. Florian is the marketing contact, and only after a ship call.</li>
+            <li>Ship only at ≥ 2 points and a hold at or above 77.5% and at or above control. Under that, rewrite or kill before any announcement.</li>
+            <li>Do not fund paid media on this read. A rollout past this segment is a later decision.</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -707,31 +696,31 @@
     <p class="eyebrow">Submit</p>
     <div class="thanks">
       <h2 style="font-size:clamp(2rem,5vh,3.2rem)">The case is ready to hand in.</h2>
-      <p class="muted" style="max-width:40rem">Digital instalment journey. The income explainer is a tier S release inside a 9-month test, read once, for variable-or-shift starters.</p>
+      <p class="muted" style="max-width:46rem">Fund a 9-month, single-read copy test for variable-or-shift starters. The outcome unit is kept agreements. About 44 extra a month if a 2-point lift ships and the hold stays 77.5%. No euro value is in the case pack.</p>
       <div class="meta">
         <div class="stat tile">
           <b style="font-family:var(--sans);font-size:1.15rem">Dennis Goeken</b>
           <span>Name</span>
         </div>
         <div class="stat">
-          <span class="missing">_(not filled)_</span>
-          <span style="display:block;margin-top:0.55vh">Cohort tag</span>
+          <b style="font-family:var(--sans);font-size:1.05rem;letter-spacing:0">B2B Riverty 2</b>
+          <span>Cohort</span>
         </div>
         <div class="stat">
-          <span class="missing">_(not filled)_</span>
-          <span style="display:block;margin-top:0.55vh">Repo link</span>
+          <a class="repo" href="https://github.com/goeke03/pm-final-project">github.com/goeke03/pm-final-project</a>
+          <span style="display:block;margin-top:0.55vh">Repo</span>
         </div>
       </div>
       <div class="rules">
         <article class="rule ship"><p class="tag">Ship</p><p class="tiny">Agreement rate up by ≥ 2 points, p &lt; 0.05, and the hold stays at or above 77.5% and at or above control.</p></article>
-        <article class="rule iterate"><p class="tag">Iterate</p><p class="tiny">Higher than control, lift under 2 points, hold still at or above 77.5% and at or above control. Worksheet’s most likely call.</p></article>
+        <article class="rule iterate"><p class="tag">Iterate</p><p class="tiny">Higher than control, lift under 2 points, hold still at or above 77.5% and at or above control.</p></article>
         <article class="rule kill"><p class="tag">Kill</p><p class="tiny">No improvement, or the rate moves down, or the hold falls below 77.5% or below control.</p></article>
       </div>
       <div class="row" style="align-items:center">
         <span class="submit-pill">Submit to the learning platform</span>
         <span class="proto">04-roadmap/prototype.html</span>
       </div>
-      <p class="source">Deck file: 06-launch/final-presentation.html. Prototype label is text, not a link. Cohort and repo were not in the project files.</p>
+      <p class="source">Deck file: 06-launch/final-presentation.html. Prototype label is text, not a link. Felix owns the help page. Florian is the marketing contact.</p>
     </div>
   </section>
 </main>
