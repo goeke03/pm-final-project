@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital instalment journey · Final project</title>
+<style>
+  :root {
+    --bg: #07162C;
+    --fg: #ffffff;
+    --muted: #cbd5e1;
+    --orange: #fb923c;
+    --cyan: #22d3ee;
+    --teal: #34d399;
+    --blue: #60a5fa;
+    --violet: #a78bfa;
+    --pink: #f472b6;
+    --eyebrow: #fdba74;
+    --line: rgba(251, 146, 60, 0.25);
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: clamp(14px, 1.35vh, 17px);
+    line-height: 1.4;
+  }
+  h1, h2, h3, p { margin: 0; }
+  button, input { font: inherit; color: inherit; }
+
+  #bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0;
+    background: var(--orange);
+    z-index: 40;
+  }
+  #dots {
+    position: fixed;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 40;
+  }
+  #dots button {
+    width: 11px;
+    height: 11px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--orange);
+    background: transparent;
+    cursor: pointer;
+  }
+  #dots button[aria-current="true"] { background: var(--orange); }
+  #dots button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+  section {
+    min-height: 100vh;
+    height: 100vh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    padding: 4.2vh 5.6vw 2.8vh 3.6vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+    overflow: hidden;
+  }
+  .slide-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4vh;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--eyebrow);
+    font-size: 0.72rem;
+  }
+  h1 {
+    font-size: clamp(2.3rem, 6.4vh, 4.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    font-weight: 680;
+    max-width: 16ch;
+  }
+  h2 {
+    font-size: clamp(1.55rem, 3.6vh, 2.15rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 660;
+  }
+  h3 {
+    font-size: 0.98rem;
+    font-weight: 650;
+  }
+  .muted { color: var(--muted); }
+  .mono {
+    font-family: var(--mono);
+    letter-spacing: 0.02em;
+  }
+  .source {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.5vh 1.15vw;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .hero {
+    background: linear-gradient(145deg, rgba(251, 146, 60, 0.22), rgba(7, 22, 44, 0.05) 46%, rgba(34, 211, 238, 0.1));
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  }
+  .tile { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28); }
+  .callout {
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--orange);
+    padding: 1.4vh 1.15vw;
+    background: rgba(251, 146, 60, 0.08);
+  }
+  .callout.bad {
+    border-left-color: var(--pink);
+    background: rgba(244, 114, 182, 0.1);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  }
+  .missing {
+    display: inline-block;
+    font-family: var(--mono);
+    color: var(--eyebrow);
+    border: 1px dashed rgba(251, 146, 60, 0.55);
+    border-radius: 999px;
+    padding: 0.25em 0.75em;
+    letter-spacing: 0.04em;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    padding: 0.28em 0.75em;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    color: var(--fg);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .pill.hot { background: var(--orange); color: #07162C; border-color: transparent; font-weight: 700; }
+  .pill.park { color: var(--muted); }
+  .row { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .grid-2 { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 1.2vw; min-height: 0; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1vw; min-height: 0; }
+  .stack { display: flex; flex-direction: column; gap: 1vh; min-height: 0; }
+  .grow { flex: 1; min-height: 0; }
+
+  .stat {
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 1.1vh 0.9vw;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  }
+  .stat b {
+    display: block;
+    font-family: var(--mono);
+    font-size: clamp(1.15rem, 2.6vh, 1.7rem);
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.35em;
+  }
+  .stat span { color: var(--muted); font-size: 0.78rem; }
+  .stat.teal b { color: var(--teal); }
+  .stat.cyan b { color: var(--cyan); }
+  .stat.blue b { color: var(--blue); }
+  .stat.pink b { color: var(--pink); }
+  .stat.orange b { color: var(--orange); }
+
+  .quote { font-size: 1.02rem; line-height: 1.35; }
+  .kicker { color: var(--cyan); font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .lane h3 { margin-bottom: 0.7vh; }
+  .lane .tag {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--eyebrow);
+  }
+  .feat {
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 0.9vh 0.8vw;
+    margin-top: 0.7vh;
+    background: rgba(255, 255, 255, 0.025);
+  }
+  .feat strong { display: block; font-size: 0.92rem; line-height: 1.25; }
+  .feat em { font-style: normal; color: var(--muted); font-family: var(--mono); font-size: 0.72rem; }
+  .now .feat { box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28); }
+  .dotc { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 0.4em; }
+  .c-now { background: var(--orange); }
+  .c-next { background: var(--cyan); }
+  .c-later { background: var(--violet); }
+  .c-cut { background: var(--pink); }
+
+  .journey {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.55vw;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .journey li {
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    padding: 1vh 0.6vw 1.1vh;
+    min-height: 0;
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .journey li.misery {
+    border-color: var(--orange);
+    background: linear-gradient(180deg, rgba(251, 146, 60, 0.22), rgba(7, 22, 44, 0.2));
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  }
+  .journey .n {
+    font-family: var(--mono);
+    color: var(--eyebrow);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+  }
+  .journey strong { display: block; margin: 0.35vh 0; font-size: 0.86rem; line-height: 1.2; }
+  .journey .num {
+    font-family: var(--mono);
+    color: var(--cyan);
+    font-size: 0.95rem;
+  }
+  .journey li.misery .num { color: var(--orange); }
+
+  .rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8vw; }
+  .rule { border-radius: 14px; border: 1px solid var(--line); padding: 1vh 0.85vw; }
+  .rule.ship { border-top: 3px solid var(--teal); }
+  .rule.iterate { border-top: 3px solid var(--cyan); }
+  .rule.kill { border-top: 3px solid var(--pink); }
+  .rule .tag {
+    font-family: var(--mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    margin-bottom: 0.4vh;
+  }
+  .rule.ship .tag { color: var(--teal); }
+  .rule.iterate .tag { color: var(--cyan); }
+  .rule.kill .tag { color: var(--pink); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1vw; min-height: 0; align-items: start; }
+  .split.fill { flex: 1; align-items: stretch; }
+  .split.fill > .card { height: 100%; }
+  .anchor { margin-top: auto; }
+  .meta { display: grid; grid-template-columns: 1.1fr 1fr 1.2fr; gap: 0.9vw; }
+  .cover-top { display: flex; justify-content: space-between; gap: 2vw; align-items: flex-end; }
+  .proto {
+    font-family: var(--mono);
+    color: #07162C;
+    background: var(--orange);
+    border-radius: 999px;
+    padding: 0.35em 0.8em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .thanks {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2vh;
+    width: 100%;
+  }
+  .submit-pill {
+    align-self: flex-start;
+    background: var(--orange);
+    color: #07162C;
+    border-radius: 999px;
+    padding: 0.7em 1.15em;
+    font-weight: 750;
+    letter-spacing: 0.01em;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  }
+  ul.clean { margin: 0.4vh 0 0; padding-left: 1.1em; }
+  ul.clean li { margin: 0.25em 0; }
+  .small { font-size: 0.86rem; }
+  .tiny { font-size: 0.78rem; color: var(--muted); }
+  .future {
+    list-style: none;
+    margin: 0.8vh 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45vh 0.8vw;
+  }
+  .future li { font-size: 0.88rem; }
+  .future b {
+    font-family: var(--mono);
+    color: var(--orange);
+    margin-right: 0.35em;
+  }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<nav id="dots" aria-label="Slides"></nav>
+<main>
+  <section id="cover" data-title="Cover">
+    <div class="cover-top">
+      <p class="eyebrow">Product School · Final project</p>
+      <p class="source">Practice data pack · A Fair Way Forward · illustrative sample. Do not present these figures as Riverty facts.</p>
+    </div>
+    <div class="slide-body">
+      <p class="kicker">BU Collection · Digital instalment journey</p>
+      <h1>Digital instalment journey</h1>
+      <p class="muted" style="max-width:46rem">Plain explainer for why income is asked and how it is used.</p>
+      <div class="card hero" style="max-width:58rem">
+        <p class="kicker">One-line pitch</p>
+        <p class="quote" style="margin-top:0.6vh">For consumers who can't pay a balance in full, we build the plan around your real income and payday, tell you plainly what happens next, and if your case needs a person, they already know your story.</p>
+      </div>
+      <div class="meta">
+        <div class="stat tile">
+          <b style="font-family:var(--sans);font-size:1.25rem;letter-spacing:0">Dennis Goeken</b>
+          <span>Name</span>
+        </div>
+        <div class="stat">
+          <span class="missing">_(not filled)_</span>
+          <span style="display:block;margin-top:0.6vh">Cohort</span>
+        </div>
+        <div class="stat">
+          <span class="missing">_(not filled)_</span>
+          <span style="display:block;margin-top:0.6vh">Repo link · plain text, no URL in the project</span>
+        </div>
+      </div>
+      <div style="margin-top:auto" class="stack">
+      <div class="grid-3" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat orange"><b>N-01</b><span>Income question on a break. They close it and mean to come back.</span></div>
+        <div class="stat cyan"><b>41.6%</b><span>Variable-or-shift agreement rate · 2,862 starters</span></div>
+        <div class="stat teal"><b>Tier S</b><span>A release. Dark until the single read at month 9.</span></div>
+        <div class="stat pink"><b>77.5%</b><span>Segment no-miss hold. The guardrail floor.</span></div>
+      </div>
+      <div class="row" style="align-items:center">
+        <span class="eyebrow">Prototype</span>
+        <span class="proto">04-roadmap/prototype.html</span>
+        <span class="tiny">Project build name: income-explainer.html</span>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="strategy" data-title="Slide 5, Strategy">
+    <p class="eyebrow">Slide 5 · Strategy</p>
+    <h2>A plan they can keep starts at the income question.</h2>
+    <div class="slide-body">
+      <div class="grid-2 grow">
+        <div class="stack">
+          <div>
+            <p class="kicker">Problem statement hook</p>
+            <p class="quote" style="margin-top:0.7vh">Consumers in financial pressure are being pushed into instalment plans they can't keep, or leaving to work it out elsewhere, so creditors lose recoveries, agents inherit cold, context-free cases, and the product's promise of a plan that holds erodes with every missed first payment.</p>
+          </div>
+          <div class="card hero grow">
+            <p class="kicker">Value proposition</p>
+            <p style="margin-top:0.7vh">For consumers who can't pay a balance in full, we build the plan around your real income and payday, tell you plainly what happens next, and if your case needs a person, they already know your story.</p>
+            <p class="tiny" style="margin-top:1vh">Primary persona, the shift-income consumer. A consumer in shift or variable work who cannot pay the balance in full and tries to set up an instalment plan in a short break.</p>
+          </div>
+        </div>
+        <div class="callout tile" style="display:flex;flex-direction:column;gap:0.8vh">
+          <p class="kicker">Data-backed hypothesis</p>
+          <p class="small">Based on N-01, a shift worker who closed the journey on a break because they did not know if income meant this month or a normal month, N-06 and T-206, where the income number is unexplained and feels unsafe to type, T-201, where 853 income documents never arrived, and a sample-month agreement rate of 41.6% for 2,862 variable or shift starters against 48.1% for a fixed salary, with 1,421 people leaving after the affordability questions and 1,313 at the income document, I believe that asking for the income of the month they are in, and telling them why that number is needed and how long it is kept, for consumers in shift or variable work who cannot pay in full, will result in more of them finishing a plan they are still paying 60 days later, as measured by a 6.5 percentage point rise in their agreement rate, from 41.6% to 48.1%. I will protect the share of new agreements with no missed payment within 60 days, 81.0% overall and 77.5% for this segment, and I will make a go/no-go decision after one journey month plus 60 days.</p>
+          <p class="tiny">The 6.5 point gap to 48.1% stays the hypothesis for the wider income work, not a claim for this copy.</p>
+        </div>
+      </div>
+      <div class="grid-3" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat orange"><b>41.6%</b><span>Variable-or-shift agreement rate · 2,862 starters</span></div>
+        <div class="stat blue"><b>48.1%</b><span>Fixed-salary agreement rate · 4,311 starters</span></div>
+        <div class="stat pink"><b>22.5%</b><span>This segment’s agreements that miss within 60 days</span></div>
+        <div class="stat teal"><b>77.5%</b><span>Segment no-miss hold · 81.0% overall, 3,115 of 3,846</span></div>
+      </div>
+      <p class="source">Source: practice data pack, sample month. Illustrative. Do not present these figures as Riverty facts.</p>
+    </div>
+  </section>
+
+  <section id="research" data-title="Slide 6, Research">
+    <p class="eyebrow">Slide 6 · Research</p>
+    <h2>They leave the screen. The screen has no workaround.</h2>
+    <div class="slide-body">
+      <div class="split fill">
+        <div class="card" style="overflow:auto">
+          <p class="kicker">Competitive analysis / workaround</p>
+          <p class="small" style="margin-top:0.7vh">The sample names no external software, calculator, or budgeting tool for this persona. The only bypasses it records are manual, and each one takes the decision off the plan screen. The person who stays on that screen has no workaround at all: the fewest months looks like the right answer, they take it, and the second payment is missed.</p>
+          <ul class="clean small">
+            <li><strong>Close the journey and mean to come back.</strong> The income question does not say whether the figure is this month or a normal month.</li>
+            <li><strong>Call a person.</strong> N-04: “Honestly I prefer to call. A person can tell me if this is going to cost me more.” why_income_is_asked is 419 of 2,592 agent contacts (16.2%), average 11.8 minutes.</li>
+            <li><strong>Trust the letter.</strong> N-07: “The amount online was not the amount in the letter. I did not want to agree to anything until someone explained it.”</li>
+          </ul>
+          <p class="kicker" style="margin-top:1.2vh">Advantages over that workaround</p>
+          <ul class="clean small">
+            <li>Payday builds the term. They agree an instalment they can keep.</li>
+            <li>The next step is plain on screen. They decide without leaving to call.</li>
+            <li>The story stays on the case. A person explains it without a restart.</li>
+          </ul>
+        </div>
+        <div class="card hero tile">
+          <p class="kicker">Moment of misery · N-01</p>
+          <p class="quote" style="margin-top:0.6vh">“I opened it on my break. It asked for my income and I did not know if they meant this month or a normal month. I closed it and meant to come back.”</p>
+          <p class="tiny">N-01, consumer, two open claims, shift work.</p>
+          <p class="small" style="margin-top:1vh"><strong style="color:var(--pink)">N-06.</strong> “I was scared to type the wrong number. What if they use it against me?”</p>
+          <p class="small" style="margin-top:0.45vh"><strong style="color:var(--cyan)">T-206.</strong> No help text explains why income is asked or how long it is kept.</p>
+          <p class="kicker" style="margin-top:1.2vh">Future-state path in the project</p>
+          <ol class="future">
+            <li><b>1</b> Real income and payday</li>
+            <li><b>2</b> What happens next</li>
+            <li><b>3</b> Agree on screen</li>
+            <li><b>4</b> A known story</li>
+          </ol>
+        </div>
+      </div>
+      <div class="anchor">
+        <p class="kicker" style="margin-bottom:0.7vh">Journey map · sample month · misery on the income question</p>
+        <ol class="journey">
+          <li>
+            <span class="n">01</span>
+            <strong>Journey start</strong>
+            <span class="num">8,360</span>
+          </li>
+          <li class="misery">
+            <span class="n">Moment of misery</span>
+            <strong>Affordability · income question</strong>
+            <span class="num">7,364</span>
+            <p class="tiny">N-01. 1,421 leave before the document.</p>
+          </li>
+          <li>
+            <span class="n">03</span>
+            <strong>Income document</strong>
+            <span class="num">5,943</span>
+            <p class="tiny">1,313 leave here. T-201: 853 documents never arrived.</p>
+          </li>
+          <li>
+            <span class="n">04</span>
+            <strong>Plan review</strong>
+            <span class="num">4,630</span>
+          </li>
+          <li>
+            <span class="n">05</span>
+            <strong>Agreement</strong>
+            <span class="num">3,846</span>
+          </li>
+          <li>
+            <span class="n">06</span>
+            <strong>No miss in 60 days</strong>
+            <span class="num">3,115</span>
+            <p class="tiny">81.0% of agreements.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="blueprint" data-title="Slide 7, Blueprint">
+    <p class="eyebrow">Slide 7 · Blueprint</p>
+    <h2>Now is the explainer. The copy does not claim the 6.5 point gap.</h2>
+    <div class="slide-body">
+      <div class="grid-3">
+        <div class="lane now">
+          <p class="tag"><span class="dotc c-now"></span>Now</p>
+          <div class="feat">
+            <strong>Plain explainer for why income is asked and how it is used</strong>
+            <em>Fill-in · value 3 / effort 1</em>
+          </div>
+          <div class="feat">
+            <strong>Pick a payment date that matches pay day</strong>
+            <em>Quick win · value 4 / effort 2</em>
+          </div>
+        </div>
+        <div class="lane">
+          <p class="tag"><span class="dotc c-next"></span>Next</p>
+          <div class="feat">
+            <strong>Photo upload that works on mobile, or skip the document under a set amount</strong>
+            <em>Big bet · value 4 / effort 3</em>
+          </div>
+          <div class="feat">
+            <strong>Handoff summary for the agent when a consumer calls</strong>
+            <em>Big bet · value 4 / effort 3</em>
+          </div>
+        </div>
+        <div class="lane">
+          <p class="tag"><span class="dotc c-later"></span>Later</p>
+          <div class="feat">
+            <strong>Affordability check before the plan options</strong>
+            <em>Big bet · value 5 / effort 4</em>
+          </div>
+          <div class="feat">
+            <strong>One plan for several open claims</strong>
+            <em>Big bet · value 5 / effort 5</em>
+          </div>
+        </div>
+      </div>
+      <p class="tiny"><span class="dotc c-cut"></span>Cut list: Show the shortest plan first to raise recovery (Fill-in, 3 / 1). Chat assistant on every portal page (Money pit, 2 / 5).</p>
+      <div>
+        <p class="kicker" style="margin-bottom:0.6vh">MoSCoW · the plain income explainer</p>
+        <div class="grid-3" style="grid-template-columns:repeat(4,1fr)">
+          <div class="feat" style="margin-top:0">
+            <em style="color:var(--orange)">Must</em>
+            <p class="tiny">On the income screen, above the field, readable on a phone. Label: this month’s income. Two sentences always visible. One action finishes the step.</p>
+          </div>
+          <div class="feat" style="margin-top:0">
+            <em style="color:var(--cyan)">Should</em>
+            <p class="tiny">One clause for a thin month. A pass-through count for variable-or-shift. A retention sentence only if already approved.</p>
+          </div>
+          <div class="feat" style="margin-top:0">
+            <em style="color:var(--violet)">Could</em>
+            <p class="tiny">Repeat the line on plan review. An inline privacy link. A hint under the field, with no example amount.</p>
+          </div>
+          <div class="feat" style="margin-top:0">
+            <em style="color:var(--pink)">Won’t now</em>
+            <p class="tiny">A second income field. A change to the calculation. Photo upload. Agent-screen copy, chat, or a help-centre page as the home of the explanation.</p>
+          </div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <p class="kicker">PRD highlights</p>
+          <p class="small" style="margin-top:0.5vh"><strong>Vision.</strong> On a short break, a shift-work consumer sees that we want this month’s income to size an instalment, and can enter it without fearing the number will be used against them.</p>
+          <p class="tiny" style="margin-top:0.5vh">Screen B copy, always visible: “We ask for this month’s income so the instalment can fit the month you are in.” “This number sizes that instalment. It does not change the balance you owe.”</p>
+          <p class="tiny" style="margin-top:0.45vh">Screens: A entry, “Set up a plan for the balance you cannot pay in full.” · B income, label “This month’s income.” · C confirmation, “This month’s income is saved.” One HTML file, plain JavaScript, no external APIs, no login.</p>
+        </div>
+        <div class="card hero tile" style="display:flex;flex-direction:column;justify-content:center;gap:0.8vh">
+          <p class="kicker">Prototype</p>
+          <p><span class="proto">04-roadmap/prototype.html</span></p>
+          <p class="tiny">Shown as a label, not a link. Project build name: income-explainer.html. Three screens. Go bar for this copy: variable-or-shift agreement rate above 41.6% after one journey month. Guardrail: 60-day no-miss hold at or above 77.5% for this segment and 81.0% overall.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="validation" data-title="Slide 8, Validation">
+    <p class="eyebrow">Slide 8 · Validation</p>
+    <h2>One change. One read at month 9.</h2>
+    <div class="slide-body">
+      <div class="card tile" style="display:flex;flex-direction:column;gap:1.1vh">
+        <div>
+          <p class="kicker">Hypothesis</p>
+          <p class="small" style="margin-top:0.4vh">I believe that the plain explainer, the field label “This month’s income” plus the two sentences on why it is asked and how it is used, for a consumer in shift or variable work who cannot pay the balance in full and is setting up an instalment plan on a short break, will result in more of them finishing an agreement because they can place the figure as this month’s income and continue, as measured by a 2 percentage-point change in the agreement rate for variable-or-shift starters within 9 months from the start. We will protect the share of this segment’s new agreements with no missed payment within 60 days throughout the test.</p>
+        </div>
+        <div class="grid-3">
+          <div>
+            <p class="kicker">Control</p>
+            <p class="small">The current income screen. Plan order, chat, the document step, and the agent desktop stay as they are.</p>
+          </div>
+          <div>
+            <p class="kicker">Variant</p>
+            <p class="small">The only change is the income label “This month’s income” and the two sentences on the current income screen.</p>
+          </div>
+          <div>
+            <p class="kicker">Primary metric</p>
+            <p class="small">Agreement rate for variable-or-shift starters.</p>
+            <p class="tiny">Baseline 41.6% on 2,862 starters. MDE ≥ 2 percentage points, two-sided p &lt; 0.05. About 9,600 per arm at 80% power.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <p class="kicker">Guardrail</p>
+            <p class="small">60-day no-miss hold for this segment. Floor 77.5%, and not below the control arm. Overall floor on the wider book is 81.0%.</p>
+          </div>
+          <div>
+            <p class="kicker">Intake and read</p>
+            <p class="small">First 7 sample-months. About 1,430 starters per arm in a sample month. The single read is 60 days after intake closes. The read date is fixed at the end of those 9 months. No results are reviewed before this date. A 14-day peek cannot see a 2-point lift or a 60-day miss.</p>
+          </div>
+        </div>
+      </div>
+      <div class="rules">
+        <article class="rule ship">
+          <p class="tag">Ship</p>
+          <p class="tiny">We will SHIP if the agreement rate for variable-or-shift starters improves by ≥ 2 percentage points at two-sided p &lt; 0.05 and the 60-day no-miss hold for this segment does not fall below 77.5%, and does not fall below the control arm, after 9 months from the start.</p>
+        </article>
+        <article class="rule iterate">
+          <p class="tag">Iterate</p>
+          <p class="tiny">We will ITERATE if the agreement rate is higher than control, the lift is below 2 percentage points, and the hold is still at or above 77.5% and at or above control.</p>
+        </article>
+        <article class="rule kill">
+          <p class="tag">Kill</p>
+          <p class="tiny">We will KILL if the agreement rate shows no improvement or moves negatively, or if the hold falls below 77.5% or below control.</p>
+        </article>
+      </div>
+      <p class="source">These figures are the fictional case sample, not Riverty results.</p>
+    </div>
+  </section>
+
+  <section id="launch" data-title="Slide 9, Launch">
+    <p class="eyebrow">Slide 9 · Launch</p>
+    <h2>Tier S release. Dark until the single read.</h2>
+    <div class="slide-body">
+      <div class="split fill">
+        <div class="stack">
+          <div class="card hero">
+            <p class="kicker">Goal</p>
+            <p style="margin-top:0.45vh">Increase number of kept instalments. This gives reliable money.</p>
+            <p class="tiny" style="margin-top:0.6vh">Working unit in the plan: a kept agreement, an agreement with no missed payment within 60 days. Kept-agreement rate equals the agreement rate times the 60-day hold.</p>
+          </div>
+          <div class="card">
+            <p class="kicker">Audience</p>
+            <p class="small" style="margin-top:0.4vh">Like the persona: portal users who don't understand my questions. The people the experiment can speak for are variable-or-shift starters, at the moment the income question appears. 2,862 starters in a sample month.</p>
+          </div>
+          <div>
+            <p class="kicker" style="margin-bottom:0.6vh">Tier · channels</p>
+            <div class="row">
+              <span class="pill hot">Tier S</span>
+              <span class="pill">Release</span>
+              <span class="pill">Owned release pages</span>
+              <span class="pill">Help page</span>
+              <span class="pill">Release note</span>
+              <span class="pill">Support note</span>
+              <span class="pill park">Paid campaign · parked</span>
+              <span class="pill park">Channel 3 · _(not filled)_</span>
+            </div>
+            <p class="tiny" style="margin-top:0.7vh">It's a quick addition to an existing feature. Little risk on stability. Just an improvement. Enablement: marketing, local communications. Product owner on help pages. Product owner contacts marketing. Paid stays unfunded until a ship call and a separate budget.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="grid-2" style="grid-template-columns:1fr 1fr">
+            <div class="stat orange"><b>2,862</b><span>Variable-or-shift starters in a sample month</span></div>
+            <div class="stat cyan"><b>41.6%</b><span>Agreement rate today · primary metric</span></div>
+            <div class="stat pink"><b>22.5%</b><span>Agreements that miss within 60 days</span></div>
+            <div class="stat teal"><b>77.5%</b><span>No-miss hold floor at the read</span></div>
+            <div class="stat blue"><b>+2 pts</b><span>MDE versus control · p &lt; 0.05 · ~9,600 per arm</span></div>
+            <div class="stat"><b>32.2%</b><span>Kept-agreement rate · 41.6% × 77.5%</span></div>
+          </div>
+          <div class="callout bad">
+            <p class="kicker" style="color:var(--pink)">Bad signal</p>
+            <p style="margin-top:0.45vh">Less instalments because more reading.</p>
+            <p class="tiny" style="margin-top:0.45vh">Fewer agreements because the extra reading stops people, or a hold under 77.5% or under control. Most likely post-launch decision on the worksheet: iterate.</p>
+          </div>
+          <p class="tiny">Success metrics named on the worksheet: instalments increase, instalments are kept. The help page, the release note, the support note, and any paid media wait for the read. During intake the explainer is visible only on the treatment arm.</p>
+        </div>
+      </div>
+      <p class="source">Worksheet plus the launch plan built from it. Sample figures are illustrative, not Riverty results.</p>
+    </div>
+  </section>
+
+  <section id="story" data-title="Slide 10, Story">
+    <p class="eyebrow">Slide 10 · Story</p>
+    <h2>The break ends before the question makes sense.</h2>
+    <div class="slide-body">
+      <div class="split">
+        <div class="stack">
+          <p class="kicker">Friction points</p>
+          <div class="card">
+            <p class="small"><strong>N-01.</strong> “I opened it on my break. It asked for my income and I did not know if they meant this month or a normal month. I closed it and meant to come back.”</p>
+          </div>
+          <div class="card">
+            <p class="small"><strong>N-06.</strong> “I was scared to type the wrong number. What if they use it against me?”</p>
+          </div>
+          <div class="card">
+            <p class="small"><strong>T-206.</strong> No help text explains why income is asked or how long it is kept.</p>
+          </div>
+          <div class="card">
+            <p class="small"><strong>N-08.</strong> “Half my calls start with me asking for the same details they already typed online. I cannot see what they entered.”</p>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="card hero">
+            <p class="kicker">Aha moment</p>
+            <p style="margin-top:0.7vh"><span class="missing">_(not filled)_</span></p>
+            <p class="tiny" style="margin-top:0.8vh">The project never names an aha moment. Closest stated line, not an aha: “this gives reliable money.” An agreement that misses a payment inside 60 days is not that money.</p>
+          </div>
+          <div class="card tile">
+            <p class="kicker">What the project does next</p>
+            <ul class="clean small">
+              <li>Beta as a silent launch. Phase 2 for everyone in this segment. Then see marketing impact.</li>
+              <li>The read date is fixed at the end of 9 months. No results are reviewed before this date.</li>
+              <li>Most likely call on the worksheet: iterate. Rewrite only if the lift is under 2 points and the hold still holds. A new test comes before any wider release.</li>
+              <li>Paid stays parked. A rollout past variable-or-shift starters is a later decision. The hold evidence covers this segment only.</li>
+              <li>A bad read closes this feature. A different feature would be a new plan.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="thanks" data-title="Submit">
+    <p class="eyebrow">Submit</p>
+    <div class="thanks">
+      <h2 style="font-size:clamp(2rem,5vh,3.2rem)">The case is ready to hand in.</h2>
+      <p class="muted" style="max-width:40rem">Digital instalment journey. The income explainer is a tier S release inside a 9-month test, read once, for variable-or-shift starters.</p>
+      <div class="meta">
+        <div class="stat tile">
+          <b style="font-family:var(--sans);font-size:1.15rem">Dennis Goeken</b>
+          <span>Name</span>
+        </div>
+        <div class="stat">
+          <span class="missing">_(not filled)_</span>
+          <span style="display:block;margin-top:0.55vh">Cohort tag</span>
+        </div>
+        <div class="stat">
+          <span class="missing">_(not filled)_</span>
+          <span style="display:block;margin-top:0.55vh">Repo link</span>
+        </div>
+      </div>
+      <div class="rules">
+        <article class="rule ship"><p class="tag">Ship</p><p class="tiny">Agreement rate up by ≥ 2 points, p &lt; 0.05, and the hold stays at or above 77.5% and at or above control.</p></article>
+        <article class="rule iterate"><p class="tag">Iterate</p><p class="tiny">Higher than control, lift under 2 points, hold still at or above 77.5% and at or above control. Worksheet’s most likely call.</p></article>
+        <article class="rule kill"><p class="tag">Kill</p><p class="tiny">No improvement, or the rate moves down, or the hold falls below 77.5% or below control.</p></article>
+      </div>
+      <div class="row" style="align-items:center">
+        <span class="submit-pill">Submit to the learning platform</span>
+        <span class="proto">04-roadmap/prototype.html</span>
+      </div>
+      <p class="source">Deck file: 06-launch/final-presentation.html. Prototype label is text, not a link. Cohort and repo were not in the project files.</p>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  var sections = Array.prototype.slice.call(document.querySelectorAll("main section"));
+  var bar = document.getElementById("bar");
+  var dots = document.getElementById("dots");
+
+  sections.forEach(function (section, i) {
+    var button = document.createElement("button");
+    button.type = "button";
+    button.title = section.getAttribute("data-title");
+    button.setAttribute("aria-label", section.getAttribute("data-title"));
+    button.addEventListener("click", function () { go(i); });
+    dots.appendChild(button);
+  });
+
+  function go(i) {
+    var n = Math.max(0, Math.min(sections.length - 1, i));
+    sections[n].scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function current() {
+    var marker = window.scrollY + window.innerHeight * 0.35;
+    var idx = 0;
+    sections.forEach(function (section, i) {
+      if (section.offsetTop <= marker) idx = i;
+    });
+    return idx;
+  }
+
+  function paint() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (max <= 0 ? 100 : (window.scrollY / max) * 100) + "%";
+    var idx = current();
+    var buttons = dots.querySelectorAll("button");
+    buttons.forEach(function (button, i) {
+      button.setAttribute("aria-current", i === idx ? "true" : "false");
+    });
+  }
+
+  document.addEventListener("keydown", function (event) {
+    var onButton = event.target.closest && event.target.closest("button");
+    if (event.key === "ArrowDown" || event.key === "PageDown") {
+      event.preventDefault();
+      go(current() + 1);
+    } else if (event.key === "ArrowUp" || event.key === "PageUp") {
+      event.preventDefault();
+      go(current() - 1);
+    } else if (event.key === " " || event.key === "Spacebar") {
+      if (onButton) return;
+      event.preventDefault();
+      go(current() + 1);
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      go(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      go(sections.length - 1);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      go(0);
+    }
+  });
+
+  window.addEventListener("scroll", paint, { passive: true });
+  window.addEventListener("resize", paint);
+  paint();
+})();
+</script>
+</body>
+</html>
